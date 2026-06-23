@@ -1,7 +1,7 @@
-from dagster import Definitions
+from dagster import Definitions, EnvVar
 
-from resources import save_csv
+from resources import BqResource
 
 all_assets = []
 
-defs = Definitions(assets=all_assets, resources={"io_manager": save_csv})
+defs = Definitions(assets=all_assets, resources={"bq": BqResource()})
