@@ -11,8 +11,16 @@ class BqResource(ConfigurableResource):
         return bq.Client(project=self.project_id)
 
     def save_data(self, df: pd.DataFrame, dataset: str, table: str):
-        table_id = f"{self.project_id}.{dataset}.{table}"
-        df.to_gbq(table_id, project_id=self.project_id, if_exists="replace")
+        table_id = f"{dataset}.{table}"
+        client = self.get_client()
+
+        client.create_dataset(dataset, exists_ok=True)
+
+        job_config = bq.LoadJobConfig(write_disposition="WRITE_APPEND")
+
+        job = client.load_table_from_dataframe(df, table_id, job_config=job_config)
+
+        job.result()
 
 
 class CoingeckoResource(ConfigurableResource):
