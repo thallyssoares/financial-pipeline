@@ -16,7 +16,7 @@ class BqResource(ConfigurableResource):
 
 
 class CoingeckoResource(ConfigurableResource):
-    api_key = EnvVar("GECKO_API_KEY")
+    api_key: str = EnvVar("GECKO_API_KEY")
 
     def get_client(self):
         client = Coingecko(demo_api_key=self.api_key, environment="demo")
