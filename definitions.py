@@ -1,7 +1,8 @@
 from dagster import Definitions, EnvVar
 
-from resources import BqResource
+from assets.gecko_data import price_df
+from resources import BqResource, CoingeckoResource
 
-all_assets = []
-
-defs = Definitions(assets=all_assets, resources={"bq": BqResource()})
+defs = Definitions(
+    assets=[price_df], resources={"bq": BqResource(), "gecko": CoingeckoResource()}
+)
