@@ -1,5 +1,5 @@
 import pandas as pd
-from dagster import asset
+from dagster import asset, asset_check, AssetCheckResult
 from resources import BqResource, get_dagster_logger
 
 logger = get_dagster_logger()
@@ -68,4 +68,28 @@ def gold_trending_prices(bq: BqResource) -> None:
     
     bq.save_data(gold_df, dataset="gold", table="trending_prices", write_disposition="WRITE_TRUNCATE")
     logger.info("Carga na camada Gold concluída com sucesso. Tabela pronta para o Looker Studio.")
+
+
+@asset_check(asset=gold_trending_prices)
+def gold_trending_prices_check(context, bq: BqResource) -> AssetCheckResult:
+    df = bq.read_data("SELECT price_usd_estimated, coin_id FROM gold.trending_prices")
+
+    if df.empty:
+        return AssetCheckResult(passed=False, description="Gold table is empty")
+
+    null_prices = df["price_usd_estimated"].isna().sum()
+    if null_prices > 0:
+        return AssetCheckResult(
+            passed=False,
+            description=f"Gold table has {null_prices} rows with null prices",
+        )
+
+    negative_prices = (df["price_usd_estimated"] < 0).sum()
+    if negative_prices > 0:
+        return AssetCheckResult(
+            passed=False,
+            description=f"Gold table has {negative_prices} rows with negative prices",
+        )
+
+    return AssetCheckResult(passed=True, description="Gold data is valid")
 

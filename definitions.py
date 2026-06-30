@@ -4,7 +4,7 @@ from assets.raw_coins_data import raw_coins_data
 from assets.raw_trending_data import raw_trending_data
 from assets.silver_coins import silver_coins
 from assets.silver_trending import silver_trending
-from assets.gold_trending_prices import gold_trending_prices
+from assets.gold_trending_prices import gold_trending_prices, gold_trending_prices_check
 
 from resources import BqResource, CoingeckoResource
 
@@ -33,6 +33,7 @@ defs = Definitions(
         "gecko": CoingeckoResource(),
     },
     schedules=[daily_schedule],
+    asset_checks=[gold_trending_prices_check],
 )
 
 

@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  dagster:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - dagster_home:/app/.dagster_home
+
+volumes:
+  dagster_home:
