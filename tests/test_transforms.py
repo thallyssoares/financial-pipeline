@@ -1,12 +1,11 @@
 import json
-from datetime import datetime
 
 import pandas as pd
 import pytest
 
+from assets.gold_trending_prices import enrich_trending_with_btc_prices
 from assets.silver_coins import parse_coin_payload, transform_bronze_coins_to_silver
 from assets.silver_trending import parse_trending_payload, transform_bronze_trending_to_silver
-from assets.gold_trending_prices import enrich_trending_with_btc_prices
 
 
 def build_coin_json(coin_id: str, price_usd: float | None = 50000.0, cap: float | None = 1e12) -> str:

@@ -17,7 +17,10 @@ class BqResource(ConfigurableResource):
 
         logger.info(f"Verificando se o dataset: {dataset} existe")
         client.create_dataset(dataset, exists_ok=True)
-        logger.info(f"Iniciando o upload de {len(df)} linhas para a tabela {table}-{table_id} (disposição: {write_disposition})")
+        logger.info(
+            f"Iniciando o upload de {len(df)} linhas para a tabela {table}-{table_id}"
+            f" (disposição: {write_disposition})"
+        )
 
         try:
             job_config = bq.LoadJobConfig(write_disposition=write_disposition)
