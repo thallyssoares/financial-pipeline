@@ -3,3 +3,5 @@ __pycache__/
 .env
 *.tmp_*
 .md/
+*.egg-info/
+.pytest_cache/
