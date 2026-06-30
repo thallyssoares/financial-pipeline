@@ -18,6 +18,7 @@ dependencies = [
     "coingecko_sdk>=3.0",
     "pandas>=2.0",
     "python-dotenv>=1.2",
+    "db-dtypes>=1.7",
 ]
 
 [project.optional-dependencies]
