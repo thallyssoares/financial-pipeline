@@ -26,6 +26,9 @@ dev = [
     "ruff>=0.5",
 ]
 
+[tool.dagster]
+module_name = "definitions"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
