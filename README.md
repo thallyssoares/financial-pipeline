@@ -94,7 +94,3 @@ Acesse a UI em `http://localhost:3000` e materialize os assets na ordem correta.
 ## Schedule
 
 O pipeline executa automaticamente todos os dias as 08:00 UTC.
-
-## Licenca
-
-MIT
