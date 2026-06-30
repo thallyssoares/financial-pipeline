@@ -11,7 +11,7 @@ class BqResource(ConfigurableResource):
     def get_client(self) -> bq.Client:
         return bq.Client(project=self.project_id)
 
-    def save_data(self, df: pd.DataFrame, dataset: str, table: str, write_disposition: str = "WRITE_APPEND"):
+    def save_data(self, df: pd.DataFrame, dataset: str, table: str, write_disposition: str = "WRITE_APPEND") -> None:
         table_id = f"{dataset}.{table}"
         client = self.get_client()
 
@@ -49,6 +49,5 @@ class BqResource(ConfigurableResource):
 class CoingeckoResource(ConfigurableResource):
     api_key: str = EnvVar("GECKO_API_KEY")
 
-    def get_client(self):
-        client = Coingecko(demo_api_key=self.api_key, environment="demo")
-        return client
+    def get_client(self) -> Coingecko:
+        return Coingecko(demo_api_key=self.api_key, environment="demo")

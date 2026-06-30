@@ -1,11 +1,13 @@
 import json
+from typing import Any
+
 import pandas as pd
 from dagster import asset
 from resources import BqResource, get_dagster_logger
 
 logger = get_dagster_logger()
 
-def parse_trending_payload(raw_payload: str, ingestion_timestamp: str) -> list:
+def parse_trending_payload(raw_payload: str, ingestion_timestamp: str) -> list[dict[str, Any]]:
     """
     Faz o parse de um único JSON de trending coins e extrai a lista de moedas
     em alta com seus respectivos rankings no momento da ingestão.

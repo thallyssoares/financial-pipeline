@@ -1,0 +1,100 @@
+# Crypto Pipeline — Dagster + CoinGecko + BigQuery
+
+Pipeline ELT de criptomoedas orquestrado pelo **Dagster**, seguindo a arquitetura medalhão (Bronze → Silver → Gold). Extrai dados da API CoinGecko, aplica transformacoes e disponibiliza dados analiticos no Google BigQuery para consumo em ferramentas de BI como Looker Studio.
+
+## Arquitetura
+
+```
+CoinGecko API
+     |
+     v
++---------------------+    +------------------------+
+| bronze.coin_data    |    | bronze.trending_data   |
+| (JSON bruto)        |    | (JSON bruto)           |
++---------------------+    +------------------------+
+     |                                |
+     v                                v
++---------------------+    +------------------------+
+| silver.coins        |    | silver.trending        |
+| dados estruturados  |    | dados estruturados     |
++---------------------+    +------------------------+
+     |                                |
+     +-----------> join <-------------+
+                       |
+                       v
+        +-----------------------------+
+        | gold.trending_prices        |
+        | tabela analitica p/ BI      |
+        +-----------------------------+
+```
+
+## Stack
+
+- **Orquestracao:** Dagster 1.13
+- **Data Warehouse:** Google BigQuery
+- **Fonte:** CoinGecko API (SDK oficial)
+- **Transformacao:** Pandas
+- **Linguagem:** Python 3.11+
+
+## Pre-requisitos
+
+- Python 3.11 ou superior
+- Google Cloud Platform com BigQuery ativado
+- Chave de API do CoinGecko (plano Demo)
+
+## Configuracao
+
+```bash
+# Clone o repositorio
+git clone <seu-repositorio>
+cd dagster-coingecko-pipeline
+
+# Crie um ambiente virtual
+python -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+.venv\Scripts\activate     # Windows
+
+# Instale as dependencias
+pip install -e .
+pip install -e ".[dev]"   # com dependencias de desenvolvimento
+
+# Configure as variaveis de ambiente
+cp .env.example .env
+# Edite o .env com suas credenciais
+```
+
+## Execucao
+
+```bash
+dagster dev
+```
+
+Acesse a UI em `http://localhost:3000` e materialize os assets na ordem correta.
+
+## Estrutura do Projeto
+
+```
+.
+├── assets/
+│   ├── __init__.py
+│   ├── raw_coins_data.py        # Bronze: extracao de BTC, ETH, SOL
+│   ├── raw_trending_data.py     # Bronze: extracao de trending coins
+│   ├── silver_coins.py          # Silver: dados estruturados das moedas
+│   ├── silver_trending.py       # Silver: dados estruturados de trending
+│   └── gold_trending_prices.py  # Gold: tabela analitica para BI
+├── tests/
+│   ├── __init__.py
+│   └── test_transforms.py       # Testes das funcoes de transformacao
+├── definitions.py               # Entry point do Dagster
+├── resources.py                 # Recursos (BigQuery, CoinGecko)
+├── pyproject.toml               # Configuracao do projeto
+└── README.md
+```
+
+## Schedule
+
+O pipeline executa automaticamente todos os dias as 08:00 UTC.
+
+## Licenca
+
+MIT

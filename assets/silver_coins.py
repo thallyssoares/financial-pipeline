@@ -1,11 +1,13 @@
 import json
+from typing import Any
+
 import pandas as pd
 from dagster import asset
 from resources import BqResource, get_dagster_logger
 
 logger = get_dagster_logger()
 
-def parse_coin_payload(raw_payload: str, ingestion_timestamp: str) -> dict:
+def parse_coin_payload(raw_payload: str, ingestion_timestamp: str) -> dict[str, Any]:
     """
     Recebe a string JSON do payload bruto e o timestamp da extração, 
     faz o parse do JSON e retorna um dicionário estruturado e limpo.
